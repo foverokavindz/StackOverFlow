@@ -5,14 +5,14 @@
         protected readonly string id;
         protected readonly string body;
         protected readonly User author;
-        protected readonly DateTime createdAt;
+        protected readonly DateTime creationTime;
 
         public Content(string id, string body, User author)
         {
             this.id = id;
             this.body = body;
             this.author = author;
-            this.createdAt = DateTime.Now;
+            this.creationTime = DateTime.Now;
         }
 
         public string GetId() { return id; }

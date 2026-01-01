@@ -1,20 +1,41 @@
-﻿namespace StackOverFlow.Entities
+﻿using StackOverFlow.Enum;
+
+namespace StackOverFlow.Entities
 {
-    class Question
+    class Question : Post
     {
-        private string title;
-        private List<Tag> tag;
-        private List<Answare> answares;
-        private Answare acceptedAnsware;
+        private readonly string title;
+        private readonly HashSet<Tag> tags;
+        private readonly List<Answer> answers = new List<Answer>();
+        private Answer acceptedAnswer;
 
-        public void AddAnsware(Answare answare)
+        public Question(string title, string body, User author, HashSet<Tag> tags)
+            : base(Guid.NewGuid().ToString(), body, author)
         {
-            answares.Add(answare);
+            this.title = title;
+            this.tags = tags;
         }
 
-        public void SetAcceptedAnsware(Answare answare)
+        public void AddAnswer(Answer answer)
         {
-            this.acceptedAnsware = answare;
+            answers.Add(answer);
         }
+
+        public void AcceptAnswer(Answer answer)
+        {
+            lock (this)
+            {
+                if (!author.GetId().Equals(answer.GetAuthor().GetId()) && acceptedAnswer == null)
+                {
+                    acceptedAnswer = answer;
+                    answer.SetAccepted(true);
+                    NotifyObservers(new Event(EventType.ACCEPT_ANSWER, answer.GetAuthor(), answer));
+                }
+            }
+        }
+
+        public string GetTitle() { return title; }
+        public HashSet<Tag> GetTags() { return tags; }
+        public List<Answer> GetAnswers() { return answers; }
     }
 }

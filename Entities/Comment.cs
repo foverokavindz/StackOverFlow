@@ -8,7 +8,8 @@ namespace StackOverFlow.Entities
 {
     class Comment : Content
     {
-        public Comment(string id, string body, User author) : base(id, body, author)
+        public Comment(string body, User author)
+            : base(Guid.NewGuid().ToString(), body, author)
         {
         }
     }

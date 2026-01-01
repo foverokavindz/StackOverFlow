@@ -1,17 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StackOverFlow.Entities
+﻿namespace StackOverFlow.Entities
 {
-    class Tag
+    class Tag : IComparable<Tag>
     {
-        string name;
+        private readonly string name;
+
         public Tag(string name)
         {
             this.name = name;
+        }
+
+        public string GetName() { return name; }
+
+        public int CompareTo(Tag other)
+        {
+            return string.Compare(name, other.name, StringComparison.Ordinal);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Tag other)
+            {
+                return name.Equals(other.name, StringComparison.OrdinalIgnoreCase);
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return name.ToLower().GetHashCode();
         }
     }
 }
